@@ -1,0 +1,6 @@
+name: Doctrine Sandbox Migrations
+migrations_namespace: App\DoctrineMigrations
+table_name: migration_versions
+migrations_directory: src/DoctrineMigrations
+
+

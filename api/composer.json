@@ -1,0 +1,39 @@
+{
+    "name": "cevantime/sherpa-skeleton",
+    "description": "A basic skeleton for sherpa framework",
+    "license": "MIT",
+    "require": {
+        "php": ">=7.1",
+        "cevantime/sherpa-framework": "@dev",
+        "symfony/yaml": "2.*",
+        "doctrine/orm": "2.*",
+        "doctrine/common": "^2.9@dev",
+        "doctrine/migrations": "^2.0@dev",
+        "league/fractal": "^0.13.0@dev",
+        "pagerfanta/pagerfanta": "^1.0@dev",
+        "doctrine/cache": "~1.4",
+        "symfony/property-access": "^4.2@dev",
+        "knplabs/doctrine-behaviors": "~1.1",
+        "middlewares/negotiation": "dev-master",
+        "cocur/slugify": "dev-master"
+    },
+    "require-dev": {
+        "codeception/codeception": "2.4.x-dev",
+        "symfony/dotenv": "^4.0"
+    },
+    "authors": [
+        {
+            "name": "Thibault Truffert",
+            "email": "thibaulttruffert@hotmail.com"
+        }
+    ],
+
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/",
+            "Sherpa\\Doctrine\\" :"sherpa-doctrine/",
+            "Sherpa\\Rest\\" :"sherpa-rest/"
+        }
+    },
+    "minimum-stability" : "dev"
+}
