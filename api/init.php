@@ -1,9 +1,9 @@
 <?php
 
-use App\App;
+use Sherpa\App\App;
 use Symfony\Component\Dotenv\Dotenv;
 
-$projectDir = realpath('..');
+$projectDir = realpath(__DIR__);
 
 require $projectDir . '/vendor/autoload.php';
 
@@ -25,6 +25,6 @@ if($debug) {
 
 $app = new App($debug);
 
-$app->addDeclaration(\App\Declarations::class);
+$app->set('project.dir', $projectDir);
 
-$app->bootstrap();
+$app->addDeclaration(\App\Declaration::class);

@@ -1,4 +1,6 @@
-.env
+/api/.env
 /nbproject/
-/vendor/
-/sherpa-doctrine/
+/api/vendor/
+/api/sherpa-doctrine/
+/api/sherpa-rest/
+/.idea/
