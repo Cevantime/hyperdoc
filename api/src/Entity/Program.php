@@ -21,7 +21,6 @@ use phpDocumentor\Reflection\Types\String_;
  * Class Program
  * @package App\Entity
  * @Entity(repositoryClass="App\Repository\ProgramRepository")
- * @Table(indexes={@Index(name="program_slug", columns={"slug"})})
  * @method string getDescription()
  * @method string setDescription(?string $description)
  * @method string setTitle(?string $title)
@@ -45,13 +44,19 @@ class Program
     protected $code;
 
     /**
+     * @var string $fullCode
+     * @Column(type="text")
+     */
+    protected $fullCode;
+
+    /**
      * @var string|null
      * @Column(type="string", nullable=true)
      */
     protected $language;
 
     /**
-     * @Column(type="string")
+     * @Column(type="string", unique=true)
      * @var string
      */
     protected $slug;
@@ -64,12 +69,18 @@ class Program
 
     /**
      * @var Collection
+     * @ManyToMany(targetEntity="ProgramValue", mappedBy="programsAssociatedInput")
+     */
+    protected $associatedInputs;
+
+    /**
+     * @var Collection
      * @OneToMany(targetEntity="ProgramValue", mappedBy="programOutput", cascade="all")
      */
     protected $outputs;
 
     /**
-     * @OneToMany(targetEntity="ProgramAssociation", mappedBy="wrapperProgram")
+     * @OneToMany(targetEntity="ProgramAssociation", mappedBy="wrapperProgram", cascade="all")
      * @var Collection
      */
     protected $wrapped;
@@ -80,76 +91,18 @@ class Program
      */
     protected $wrappers;
 
+    /**
+     * @var ProgramValue[]
+     */
+    protected $allInputs;
+
     public function __construct()
     {
         $this->inputs = new ArrayCollection();
         $this->outputs = new ArrayCollection();
         $this->wrapped = new ArrayCollection();
         $this->wrappers = new ArrayCollection();
-    }
-
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param int $id
-     */
-    public function setId(int $id): void
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCode(): string
-    {
-        return $this->code;
-    }
-
-    /**
-     * @param string $code
-     */
-    public function setCode(string $code): void
-    {
-        $this->code = $code;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getLanguage(): ?string
-    {
-        return $this->language;
-    }
-
-    /**
-     * @param null|string $language
-     */
-    public function setLanguage(?string $language): void
-    {
-        $this->language = $language;
-    }
-
-    /**
-     * @return Collection
-     */
-    public function getInputs(): Collection
-    {
-        return $this->inputs;
-    }
-
-    /**
-     * @param Collection $inputs
-     */
-    public function setInputs(Collection $inputs): void
-    {
-        $this->inputs = $inputs;
+        $this->associatedInputs = new ArrayCollection();
     }
 
     public function addInput(ProgramValue $value): self
@@ -159,6 +112,16 @@ class Program
         }
         $this->inputs->add($value);
         $value->setProgramInput($this);
+        return $this;
+    }
+
+    public function addWrapped(ProgramAssociation $wrapped) : self
+    {
+        if($this->wrapped->contains($wrapped)) {
+            return $this;
+        }
+        $this->wrapped->add($wrapped);
+        $wrapped->setWrapperProgram($this);
         return $this;
     }
 
@@ -178,9 +141,76 @@ class Program
         $this->outputs = $outputs;
     }
 
-    public function __call($method, $arguments)
+    /**
+     * @return int
+     */
+    public function getId(): int
     {
-        return $this->proxyCurrentLocaleTranslation($method, $arguments);
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     * @return Program
+     */
+    public function setId(int $id): Program
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCode(): string
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param string $code
+     * @return Program
+     */
+    public function setCode(string $code): Program
+    {
+        $this->code = $code;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFullCode(): string
+    {
+        return $this->fullCode;
+    }
+
+    /**
+     * @param string $fullCode
+     * @return Program
+     */
+    public function setFullCode(string $fullCode): Program
+    {
+        $this->fullCode = $fullCode;
+        return $this;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getLanguage(): ?string
+    {
+        return $this->language;
+    }
+
+    /**
+     * @param null|string $language
+     * @return Program
+     */
+    public function setLanguage(?string $language): Program
+    {
+        $this->language = $language;
+        return $this;
     }
 
     /**
@@ -193,10 +223,30 @@ class Program
 
     /**
      * @param string $slug
+     * @return Program
      */
-    public function setSlug(string $slug): void
+    public function setSlug(string $slug): Program
     {
         $this->slug = $slug;
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getInputs(): Collection
+    {
+        return $this->inputs;
+    }
+
+    /**
+     * @param Collection $inputs
+     * @return Program
+     */
+    public function setInputs(Collection $inputs): Program
+    {
+        $this->inputs = $inputs;
+        return $this;
     }
 
     /**
@@ -209,10 +259,12 @@ class Program
 
     /**
      * @param Collection $wrapped
+     * @return Program
      */
-    public function setWrapped(Collection $wrapped): void
+    public function setWrapped(Collection $wrapped): Program
     {
         $this->wrapped = $wrapped;
+        return $this;
     }
 
     /**
@@ -225,9 +277,44 @@ class Program
 
     /**
      * @param Collection $wrappers
+     * @return Program
      */
-    public function setWrappers(Collection $wrappers): void
+    public function setWrappers(Collection $wrappers): Program
     {
         $this->wrappers = $wrappers;
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getAssociatedInputs(): Collection
+    {
+        return $this->associatedInputs;
+    }
+
+    /**
+     * @return Collection<ProgramValue>
+     */
+    public function getAllInputs()
+    {
+        $inputs = new ArrayCollection($this->getInputs()->toArray());
+        foreach ($this->getAssociatedInputs() as $input) {
+            $inputs->add($input);
+        }
+        return $inputs;
+    }
+
+    /**
+     * @param Collection $associatedInputs
+     */
+    public function setAssociatedInputs(Collection $associatedInputs): void
+    {
+        $this->associatedInputs = $associatedInputs;
+    }
+
+    public function __call($method, $arguments)
+    {
+        return $this->proxyCurrentLocaleTranslation($method, $arguments);
     }
 }

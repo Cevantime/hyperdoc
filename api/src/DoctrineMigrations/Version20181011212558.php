@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20180930150353 extends AbstractMigration
+final class Version20181011212558 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -22,9 +22,7 @@ final class Version20180930150353 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE Program ADD slug VARCHAR(255) NOT NULL');
-        $this->addSql('CREATE INDEX program_slug ON Program (slug)');
-        $this->addSql('ALTER TABLE ProgramTranslation DROP slug');
+        $this->addSql('ALTER TABLE program DROP INDEX program_slug, ADD UNIQUE INDEX UNIQ_92ED7784989D9B62 (slug)');
     }
 
     public function down(Schema $schema) : void
@@ -32,8 +30,6 @@ final class Version20180930150353 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('DROP INDEX program_slug ON Program');
-        $this->addSql('ALTER TABLE Program DROP slug');
-        $this->addSql('ALTER TABLE ProgramTranslation ADD slug VARCHAR(255) DEFAULT NULL COLLATE utf8_unicode_ci');
+        $this->addSql('ALTER TABLE program DROP INDEX UNIQ_92ED7784989D9B62, ADD INDEX program_slug (slug)');
     }
 }

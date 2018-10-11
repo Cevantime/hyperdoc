@@ -9,6 +9,7 @@
 namespace App\Declarations;
 
 
+use App\Subscriber\SnakifyClassnamesSubscriber;
 use DI\Container;
 use DI\ContainerBuilder;
 use Doctrine\Common\EventManager;
@@ -23,7 +24,7 @@ use Sherpa\App\App;
 use Sherpa\Declaration\Declaration;
 use Sherpa\Declaration\DeclarationInterface;
 
-class DoctrineBehaviorsDeclaration extends Declaration
+class DoctrineDeclaration extends Declaration
 {
     public function delayed(App $app)
     {
@@ -56,6 +57,8 @@ class DoctrineBehaviorsDeclaration extends Declaration
             'Knp\DoctrineBehaviors\Model\Timestampable\Timestampable',
             'datetime'
         ));
+
+        $ev->addEventSubscriber(new SnakifyClassnamesSubscriber());
 
     }
 }

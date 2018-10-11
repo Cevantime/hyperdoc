@@ -10,6 +10,7 @@
 namespace App\Entity;
 
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 /**
@@ -60,6 +61,12 @@ class ProgramValue
      * @ManyToOne(targetEntity="Program", inversedBy="inputs")
      */
     protected $programInput;
+
+    /**
+     * @var Program
+     * @ManyToMany(targetEntity="Program", inversedBy="associatedInputs")
+     */
+    protected $programsAssociatedInput;
     /**
      * @var Program
      * @ManyToOne(targetEntity="Program", inversedBy="outputs")
@@ -71,6 +78,12 @@ class ProgramValue
      * @var Collection
      */
     protected $injections;
+
+    public function __construct()
+    {
+        $this->injections = new ArrayCollection();
+        $this->programsAssociatedInput = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -90,10 +103,12 @@ class ProgramValue
 
     /**
      * @param null|string $name
+     * @return ProgramValue
      */
-    public function setName(?string $name): void
+    public function setName(?string $name): ProgramValue
     {
         $this->name = $name;
+        return $this;
     }
 
     /**
@@ -190,5 +205,37 @@ class ProgramValue
     public function setDescription(?string $description): void
     {
         $this->description = $description;
+    }
+
+    /**
+     * @return Program
+     */
+    public function getProgramsAssociatedInput(): Program
+    {
+        return $this->programsAssociatedInput;
+    }
+
+    /**
+     * @param Program $programsAssociatedInput
+     */
+    public function setProgramsAssociatedInput(Program $programsAssociatedInput): void
+    {
+        $this->programsAssociatedInput = $programsAssociatedInput;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getInjections(): Collection
+    {
+        return $this->injections;
+    }
+
+    /**
+     * @param Collection $injections
+     */
+    public function setInjections(Collection $injections): void
+    {
+        $this->injections = $injections;
     }
 }

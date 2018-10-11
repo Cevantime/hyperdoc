@@ -10,12 +10,14 @@ namespace App\Builder;
 
 
 use App\Entity\ProgramValue;
+use Sherpa\Rest\Utils\Bag;
 use Sherpa\Rest\Builder\RestBuilderInterface;
+use Sherpa\Rest\Validator\InputBag;
 
 class ProgramValueBuilder implements RestBuilderInterface
 {
 
-    public function build(array $data, $locale = '')
+    public function build(InputBag $data)
     {
         $progamValue = new ProgramValue();
 
@@ -24,7 +26,7 @@ class ProgramValueBuilder implements RestBuilderInterface
         return $progamValue;
     }
 
-    public function update(array $data, $programValue, $locale = '')
+    public function update(InputBag $data, $programValue)
     {
         foreach (['name', 'type', 'value', 'defaultValue'] as $value) {
             if(isset($data[$value])) {

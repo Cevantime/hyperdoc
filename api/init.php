@@ -18,13 +18,13 @@ if (!isset($_SERVER['APP_ENV'])) {
 $env = $_SERVER['APP_ENV'] ?? 'dev';
 $debug = (bool) ($_SERVER['APP_DEBUG'] ?? ('prod' !== $env));
 
-if($debug) {
+//if($debug) {
     ini_set("display_errors", 1);
     error_reporting(E_ALL);
-}
+//}
 
 $app = new App($debug);
 
-$app->set('project.dir', $projectDir);
+$app->set('projectDir', $projectDir);
 
 $app->addDeclaration(\App\Declaration::class);

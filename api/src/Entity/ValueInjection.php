@@ -55,10 +55,12 @@ class ValueInjection
 
     /**
      * @param int $id
+     * @return ValueInjection
      */
-    public function setId(int $id): void
+    public function setId(int $id): ValueInjection
     {
         $this->id = $id;
+        return $this;
     }
 
     /**
@@ -71,10 +73,12 @@ class ValueInjection
 
     /**
      * @param string $value
+     * @return ValueInjection
      */
-    public function setValue(string $value): void
+    public function setValue(string $value): ValueInjection
     {
         $this->value = $value;
+        return $this;
     }
 
     /**
@@ -87,10 +91,12 @@ class ValueInjection
 
     /**
      * @param ProgramValue $programValue
+     * @return ValueInjection
      */
-    public function setProgramValue(ProgramValue $programValue): void
+    public function setProgramValue(ProgramValue $programValue): ValueInjection
     {
         $this->programValue = $programValue;
+        return $this;
     }
 
     /**
@@ -103,10 +109,12 @@ class ValueInjection
 
     /**
      * @param ProgramAssociation $programAssociationInput
+     * @return ValueInjection
      */
-    public function setProgramAssociationInput(ProgramAssociation $programAssociationInput): void
+    public function setProgramAssociationInput(ProgramAssociation $programAssociationInput): ValueInjection
     {
         $this->programAssociationInput = $programAssociationInput;
+        return $this;
     }
 
     /**
@@ -119,9 +127,13 @@ class ValueInjection
 
     /**
      * @param ProgramAssociation $programAssociationOutput
+     * @return ValueInjection
      */
-    public function setProgramAssociationOutput(ProgramAssociation $programAssociationOutput): void
+    public function setProgramAssociationOutput(ProgramAssociation $programAssociationOutput): ValueInjection
     {
         $this->programAssociationOutput = $programAssociationOutput;
+        return $this;
     }
+
+
 }

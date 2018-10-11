@@ -9,6 +9,7 @@
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * Class Program
@@ -36,7 +37,7 @@ class ProgramAssociation
     private $wrappedProgram;
 
     /**
-     * @OneToMany(targetEntity="ValueInjection", mappedBy="programAssociationInput")
+     * @OneToMany(targetEntity="ValueInjection", mappedBy="programAssociationInput", cascade="all")
      * @var ValueInjection[]
      */
     private $injections;
@@ -62,10 +63,12 @@ class ProgramAssociation
 
     /**
      * @param int $id
+     * @return ProgramAssociation
      */
-    public function setId(int $id): void
+    public function setId(int $id): ProgramAssociation
     {
         $this->id = $id;
+        return $this;
     }
 
     /**
@@ -78,10 +81,12 @@ class ProgramAssociation
 
     /**
      * @param Program $wrapperProgram
+     * @return ProgramAssociation
      */
-    public function setWrapperProgram(Program $wrapperProgram): void
+    public function setWrapperProgram(Program $wrapperProgram): ProgramAssociation
     {
         $this->wrapperProgram = $wrapperProgram;
+        return $this;
     }
 
     /**
@@ -94,41 +99,58 @@ class ProgramAssociation
 
     /**
      * @param Program $wrappedProgram
+     * @return ProgramAssociation
      */
-    public function setWrappedProgram(Program $wrappedProgram): void
+    public function setWrappedProgram(Program $wrappedProgram): ProgramAssociation
     {
         $this->wrappedProgram = $wrappedProgram;
+        return $this;
     }
 
     /**
      * @return ValueInjection[]
      */
-    public function getInjections(): array
+    public function getInjections(): Collection
     {
         return $this->injections;
     }
 
     /**
      * @param ValueInjection[] $injections
+     * @return ProgramAssociation
      */
-    public function setInjections(array $injections): void
+    public function setInjections(Collection $injections): ProgramAssociation
     {
         $this->injections = $injections;
+        return $this;
     }
 
     /**
      * @return ValueInjection[]
      */
-    public function getReceptions(): array
+    public function getReceptions(): Collection
     {
         return $this->receptions;
     }
 
     /**
      * @param ValueInjection[] $receptions
+     * @return ProgramAssociation
      */
-    public function setReceptions(array $receptions): void
+    public function setReceptions(Collection $receptions): ProgramAssociation
     {
         $this->receptions = $receptions;
+        return $this;
+    }
+
+    public function addInjection(ValueInjection $injection) : ProgramAssociation
+    {
+        if($this->injections->contains($injection)) {
+            return $this;
+        }
+
+        $this->injections->add($injection);
+        $injection->setProgramAssociationInput($this);
+        return $this;
     }
 }

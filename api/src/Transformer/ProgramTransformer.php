@@ -10,18 +10,24 @@ namespace App\Transformer;
 
 
 use App\Entity\Program;
+use App\Entity\ProgramValue;
 use App\Repository\ProgramRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use League\Fractal\ParamBag;
+use Sherpa\Rest\Utils\Bag;
 use League\Fractal\TransformerAbstract;
 
 class ProgramTransformer extends TransformerAbstract
 {
     protected $availableIncludes = [
+        'description',
         'exec',
         'inputs',
-        'outputs'
+        'outputs',
+        'code',
+        'full-code',
+        'extended-inputs'
     ];
 
     /**
@@ -46,38 +52,18 @@ class ProgramTransformer extends TransformerAbstract
             'id' => $program->getId(),
             'slug' => $program->getSlug(),
             'title' => $program->getTitle(),
-            'code' => $program->getCode(),
-            'description' => $program->getDescription()
+            'language' => $program->getLanguage()
         ];
-    }
-
-    public function buildFullProgram(Program $program)
-    {
-        $this->buildFullProgramFinal($program, new ArrayCollection());
-    }
-
-    public function buildFullProgramFinal(Program $program, Collection $inputs)
-    {
-        $wrappedAssociations = $program->getWrapped();
-        foreach($wrappedAssociations as $association) {
-            $child = $this->buildFullProgramFinal($association->getWrappedProgram(), $inputs);
-            $injections = $association->getInjections();
-            $injectedValues = array_map(function($injection){
-                return $injection->getProgramValue();
-            }, $injections);
-            foreach ($child->getInputs() as $childInput) {
-                if( ! in_array($childInput, $injectedValues)) {
-                    $inputs->add($childInput);
-                } else {
-
-                }
-            }
-        }
     }
 
     public function includeInputs(Program $program)
     {
         return $this->collection($program->getInputs(), $this->programValueTransformer);
+    }
+
+    public function includeExtendedInputs(Program $program)
+    {
+        return $this->collection($program->getAllInputs(), $this->programValueTransformer);
     }
 
     public function includeOutputs(Program $program)
@@ -91,18 +77,33 @@ class ProgramTransformer extends TransformerAbstract
             return null;
         }
 
-        $inputs = $program->getInputs();
-        $code = $program->getCode();
+        $inputs = $program->getAllInputs();
+        $code = $program->getFullCode();
 
         foreach($inputs as $input) {
             $valueProvided =  $params->get($input->getName());
             if($input->getDefaultValue() === null && $valueProvided === null) {
                 throw new \Exception(sprintf("%s input is required to get executable code", $input->getName()));
             } else {
-                $code = str_replace(sprintf('[[%s]]', $input->getName()), $valueProvided[0] ?? $input->getDefaultValue(), $code);
+                $code = str_replace(sprintf('[[%s@%s]]', $input->getProgramInput()->getSlug(), $input->getName()), $valueProvided[0] ?? $input->getDefaultValue(), $code);
             }
         }
 
-        return $this->item($code, function($code) { return ['code' => $code] ;});
+        return $this->primitive($code);
+    }
+
+    public function includeFullCode(Program $program)
+    {
+        return $this->primitive($program->getFullCode());
+    }
+
+    public function includeDescription(Program $program)
+    {
+        return $this->primitive($program->getDescription());
+    }
+
+    public function includeCode(Program $program)
+    {
+        return $this->primitive($program->getCode());
     }
 }
