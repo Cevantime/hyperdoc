@@ -13,6 +13,7 @@ use App\Entity\ProgramAssociation;
 use App\Entity\ProgramValue;
 use App\Entity\ValueInjection;
 use App\Repository\ProgramRepository;
+use App\Service\FullCodeGenerator;
 use Cocur\Slugify\Slugify;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Expr\Value;
@@ -31,14 +32,16 @@ class ProgramBuilder implements RestBuilderInterface
     const PROGRAM_REGEX = '/\\[\\%(.+?)\\%\\]/';
 
     protected $valueBuilder;
+    protected $codeGenerator;
     protected $programRepo;
     protected $locale;
 
-    public function __construct(ProgramValueBuilder $valueBuilder, ProgramRepository $programRepo, ServerRequestInterface $request)
+    public function __construct(ProgramValueBuilder $valueBuilder, ProgramRepository $programRepo, ServerRequestInterface $request, FullCodeGenerator $codeGenerator)
     {
         $this->valueBuilder = $valueBuilder;
         $this->programRepo = $programRepo;
         $this->locale = $request->getHeaderLine('Accept-Language');
+        $this->codeGenerator = $codeGenerator;
     }
 
     public function build(InputBag $data)
@@ -54,7 +57,7 @@ class ProgramBuilder implements RestBuilderInterface
         $this->save($data, $program);
     }
 
-    protected function save(InputBag $data, $program)
+    protected function save(InputBag $data, Program $program)
     {
         $translation = $program->translate($this->locale);
 
@@ -71,16 +74,19 @@ class ProgramBuilder implements RestBuilderInterface
         }
 
         if (isset($data['inputs']) && is_array($data['inputs'])) {
+            $inputNames = array_map(function($input) {return $input->getName(); }, $program->getInputs()->toArray());
             foreach ($data['inputs'] as $input) {
                 $programValue = $this->valueBuilder->build(new InputBag($input));
-                $program->addInput($programValue);
+                if( ! in_array($programValue->getName(), $inputNames)) {
+                    $program->addInput($programValue);
+                }
             }
         }
 
         $program->mergeNewTranslations();
         $this->parseInputs($program);
         $this->parseWrapped($program);
-        $this->generateFullCode($program);
+        $this->codeGenerator->generateFullCode($program);
     }
 
     protected function parseInputs(Program $program)
@@ -107,7 +113,7 @@ class ProgramBuilder implements RestBuilderInterface
             return $wrapped->getWrappedProgram()->getSlug();
         }, $wrapped);
         $wrapped = array_combine($programSlugs, $wrapped);
-        $rawCode = $this->generateFullyQualifiedCode($program);
+        $rawCode = $this->codeGenerator->generateFullyQualifiedCode($program);
         preg_match_all(self::PROGRAM_REGEX, $rawCode, $matched);
         $program->getWrapped()->clear();
 
@@ -147,35 +153,6 @@ class ProgramBuilder implements RestBuilderInterface
 
             $program->addWrapped($wrappedAssociation);
         }
-    }
-
-    protected function generateFullyQualifiedCode(Program $program)
-    {
-        $code = $program->getCode();
-        $inputs = $program->getInputs();
-        $slug = $program->getSlug();
-        foreach ($inputs as $input) {
-            $code = str_replace(sprintf('[[%s]]', $input->getName()), '[[' . $slug . '@' . $input->getName() . ']]', $code);
-        }
-        return $code;
-    }
-
-    protected function generateFullCode(Program $program)
-    {
-        // [%mon-program:mon_input(ma_valeur):mon_autre_input(mon_autre_valeur)%]
-        $code = $this->generateFullyQualifiedCode($program);
-        $wrappedAssociations = $program->getWrapped();
-
-        foreach ($wrappedAssociations as $wrappedAssociation) {
-            $wrappedProgram = $wrappedAssociation->getWrappedProgram();
-            $slug = $wrappedProgram->getSlug();
-            $code = preg_replace('/\\[\\%' . preg_quote($slug) . '(:.+?)*\\%\\]/', $wrappedProgram->getFullCode(), $code, 1);
-            foreach ($wrappedAssociation->getInjections() as $injection) {
-                $code = str_replace('[[' . $slug . '@' . $injection->getProgramValue()->getName() . ']]', $injection->getValue(), $code);
-            }
-        }
-
-        $program->setFullCode($code);
     }
 
     protected function generateAssociatedInputs(Program $program)

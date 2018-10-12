@@ -51,6 +51,7 @@ class Declaration extends \Sherpa\Declaration\Declaration
     {
         $map->crud(Program::class, function ($map) {
             $map->getRoute('item')->tokens(['id' => '[a-z0-9\-]+']);
+            $map->getRoute('update')->tokens(['id' => '[a-z0-9\-]+']);
             $map->getRoute('delete')->tokens(['id' => '[a-z0-9\-]+']);
         }, '', '/{locale}');
 

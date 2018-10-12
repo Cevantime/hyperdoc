@@ -9,10 +9,13 @@
 namespace App\Declarations;
 
 
+use App\Service\FullCodeGenerator;
+use App\Subscriber\FullCodeSubscriber;
 use App\Subscriber\SnakifyClassnamesSubscriber;
 use DI\Container;
 use DI\ContainerBuilder;
 use Doctrine\Common\EventManager;
+use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
 use Knp\DoctrineBehaviors\ORM\Sluggable\SluggableSubscriber;
@@ -59,6 +62,8 @@ class DoctrineDeclaration extends Declaration
         ));
 
         $ev->addEventSubscriber(new SnakifyClassnamesSubscriber());
+
+        $ev->addEventSubscriber(new FullCodeSubscriber($app->get(FullCodeGenerator::class)));
 
     }
 }
