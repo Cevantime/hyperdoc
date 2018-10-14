@@ -17,9 +17,11 @@
     "@vue/cli-plugin-babel": "^3.0.4",
     "@vue/cli-plugin-typescript": "^3.0.4",
     "@vue/cli-service": "^3.0.4",
+    "axios": "^0.18.0",
     "node-sass": "^4.9.0",
     "sass-loader": "^7.0.1",
     "typescript": "^3.0.0",
+    "vue-cli-plugin-axios-ts": "^1.0.2",
     "vue-template-compiler": "^2.5.17"
   }
 }

@@ -92,6 +92,12 @@ class Program
     protected $wrappers;
 
     /**
+     * @ManyToOne(targetEntity="User", inversedBy="programs")
+     * @var User
+     */
+    protected $author;
+
+    /**
      * @var ProgramValue[]
      */
     protected $allInputs;
@@ -294,6 +300,22 @@ class Program
     }
 
     /**
+     * @return User
+     */
+    public function getAuthor(): User
+    {
+        return $this->author;
+    }
+
+    /**
+     * @param User $author
+     */
+    public function setAuthor(User $author): void
+    {
+        $this->author = $author;
+    }
+
+    /**
      * @return Collection<ProgramValue>
      */
     public function getAllInputs()
@@ -303,6 +325,15 @@ class Program
             $inputs->add($input);
         }
         return $inputs;
+    }
+
+    public function getInputByName($name) {
+        foreach ($this->inputs as $input) {
+            if($input->getName() === $name) {
+                return $input;
+            }
+        }
+        return null;
     }
 
     /**

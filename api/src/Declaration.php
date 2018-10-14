@@ -8,6 +8,7 @@ use App\Declarations\DoctrineDeclaration;
 use App\Entity\Product;
 use App\Entity\Program;
 use App\Entity\ProgramValue;
+use App\Middleware\AllowCrossOriginMiddleware;
 use App\Middleware\DebugMiddleware;
 use Aura\Router\Map;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -42,6 +43,8 @@ class Declaration extends \Sherpa\Declaration\Declaration
     public function delayed(App $app)
     {
         $app->add((new ContentLanguage(['en', 'fr']))->usePath(true), 200);
+        $app->add(new AllowCrossOriginMiddleware());
+
         if ($app->isDebug()) {
             $app->add(new DebugMiddleware($app->get(EntityManagerInterface::class)));
         }
@@ -54,10 +57,6 @@ class Declaration extends \Sherpa\Declaration\Declaration
             $map->getRoute('update')->tokens(['id' => '[a-z0-9\-]+']);
             $map->getRoute('delete')->tokens(['id' => '[a-z0-9\-]+']);
         }, '', '/{locale}');
-
-        $map->crud(ProgramValue::class, function ($map) {
-            $map->removeRoute('create');
-        });
     }
 
 }
