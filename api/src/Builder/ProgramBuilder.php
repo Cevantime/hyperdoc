@@ -74,11 +74,12 @@ class ProgramBuilder implements RestBuilderInterface
         }
 
         if (isset($data['inputs']) && is_array($data['inputs'])) {
-            $inputNames = array_map(function($input) {return $input->getName(); }, $program->getInputs()->toArray());
             foreach ($data['inputs'] as $input) {
-                $programValue = $this->valueBuilder->build(new InputBag($input));
-                if( ! in_array($programValue->getName(), $inputNames)) {
-                    $program->addInput($programValue);
+                $input = new InputBag($input);
+                if( ($programInput = $program->getInputByName($input['name']))) {
+                    $this->valueBuilder->update($input, $programInput);
+                } else {
+                    $program->addInput($this->valueBuilder->build($input));
                 }
             }
         }

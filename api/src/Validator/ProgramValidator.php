@@ -44,6 +44,7 @@ class ProgramValidator implements RestValidatorInterface
 
         if (!isset($input['language']) || !in_array($input['language'], self::LANGUAGES)) {
             $input->getErrors()[] = 'The provided language does not exist or is invalid';
+            return false;
         }
 
         $slug = $input['language'] . '-' . (new Slugify())->slugify($input['title']);

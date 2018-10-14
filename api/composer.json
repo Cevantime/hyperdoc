@@ -15,7 +15,8 @@
         "symfony/property-access": "^4.2@dev",
         "knplabs/doctrine-behaviors": "~1.1",
         "middlewares/negotiation": "dev-master",
-        "cocur/slugify": "dev-master"
+        "cocur/slugify": "dev-master",
+        "league/oauth2-server": "dev-master"
     },
     "require-dev": {
         "codeception/codeception": "2.4.x-dev",
