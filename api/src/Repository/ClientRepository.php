@@ -37,7 +37,7 @@ class ClientRepository extends ServiceRepository implements ClientRepositoryInte
     public function getClientEntity($clientIdentifier, $grantType = null, $clientSecret = null, $mustValidateSecret = true)
     {
         $client = $this->findOneBy(['identifier' => $clientIdentifier]);
-        if($mustValidateSecret && $client->getSecret() !== $clientSecret) {
+        if($mustValidateSecret && ($client === null || $client->getSecret() !== $clientSecret)) {
             return null;
         }
         return $client;

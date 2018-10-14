@@ -45,7 +45,11 @@ class ResolveAccessTokenOwnerSubscriber implements EventSubscriber
         $entity = $args->getEntity();
 
         if(($entity instanceof AccessToken) || ($entity instanceof AuthCode)) {
+
             $user = $this->userRepo->find($entity->getUserIdentifier());
+            if(!$user) {
+                return;
+            }
             if($entity instanceof AccessToken) {
                 $user->addAccessToken($entity);
             } else {

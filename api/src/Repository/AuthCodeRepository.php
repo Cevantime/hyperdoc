@@ -54,7 +54,7 @@ class AuthCodeRepository extends ServiceRepository implements AuthCodeRepository
      */
     public function revokeAuthCode($codeId)
     {
-        $authCode = $this->findBy(['identifier' => $codeId]);
+        $authCode = $this->findOneBy(['identifier' => $codeId]);
 
         if($authCode) {
             $authCode->setRevoked(true);
@@ -71,7 +71,7 @@ class AuthCodeRepository extends ServiceRepository implements AuthCodeRepository
      */
     public function isAuthCodeRevoked($codeId)
     {
-        $authCode = $this->findBy(['identifier' => $codeId]);
+        $authCode = $this->findOneBy(['identifier' => $codeId]);
         return !$authCode || $authCode->isRevoked();
     }
 }

@@ -59,8 +59,8 @@ class OAuthDeclaration extends Declaration
 
     public function routes(Map $map)
     {
-        $map->get('/authorize', OAuthController::class . '::authorize');
-        $map->get('/access-token', OAuthController::class . '::accessToken');
+        $map->get('authorize','/authorize', OAuthController::class . '::authorize');
+        $map->post('access_token','/access-token', OAuthController::class . '::accessToken');
     }
 
     public function delayed(App $app)

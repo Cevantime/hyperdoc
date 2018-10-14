@@ -41,12 +41,12 @@ class AccessToken implements AccessTokenEntityInterface
 
     /**
      * @var \DateTime
-     * @Column(type="date")
+     * @Column(type="datetime")
      */
     protected $expiryDateTime;
 
     /**
-     * @var int
+     * @var int|null
      */
     protected $userIdentifier;
 
@@ -78,7 +78,7 @@ class AccessToken implements AccessTokenEntityInterface
      * @var bool $revoked
      * @Column(type="boolean", options={"default" : false})
      */
-    protected $revoked;
+    protected $revoked = false;
 
     public function __construct()
     {
@@ -137,7 +137,7 @@ class AccessToken implements AccessTokenEntityInterface
     /**
      * @return int
      */
-    public function getUserIdentifier(): int
+    public function getUserIdentifier(): ?int
     {
         return $this->userIdentifier;
     }

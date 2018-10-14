@@ -76,7 +76,7 @@ class AccessTokenRepository extends ServiceRepository implements AccessTokenRepo
      */
     public function isAccessTokenRevoked($tokenId)
     {
-        $accessToken = $this->findBy(['identifier' => $tokenId]);
+        $accessToken = $this->findOneBy(['identifier' => $tokenId]);
         return  ! $accessToken || $accessToken->isRevoked();
     }
 }

@@ -15,12 +15,14 @@ use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Zend\Diactoros\Response;
 use Zend\Diactoros\Stream;
 
-class OAuthController extends Controller
+class OAuthController
 {
-    public function authorize(ServerRequestInterface $request, ResponseInterface $response, AuthorizationServer $server)
+    public function authorize(ServerRequestInterface $request, AuthorizationServer $server)
     {
+        $response = new Response();
         try {
             // Validate the HTTP request and return an AuthorizationRequest object.
             $authRequest = $server->validateAuthorizationRequest($request);
@@ -42,12 +44,10 @@ class OAuthController extends Controller
             return $server->completeAuthorizationRequest($authRequest, $response);
 
         } catch (OAuthServerException $exception) {
-
             // All instances of OAuthServerException can be formatted into a HTTP response
             return $exception->generateHttpResponse($response);
 
         } catch (\Exception $exception) {
-            // Unknown exception
             $body = new Stream(fopen('php://temp', 'r+'));
             $body->write($exception->getMessage());
             return $response->withStatus(500)->withBody($body);
@@ -55,11 +55,10 @@ class OAuthController extends Controller
         }
     }
 
-    public function accessToken(ServerRequestInterface $request, ResponseInterface $response, AuthorizationServer $server)
+    public function accessToken(ServerRequestInterface $request, AuthorizationServer $server)
     {
-
+        $response = new Response();
         try {
-
             // Try to respond to the request
             return $server->respondToAccessTokenRequest($request, $response);
 

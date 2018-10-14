@@ -39,16 +39,17 @@ class DebugMiddleware implements MiddlewareInterface
         $queryLogger = new DoctrineLogger();
         $this->em->getConnection()->getConfiguration()->setSQLLogger($queryLogger);
         $response = $handler->handle($request);
-        if($response instanceof JsonResponse) {
-            $data = json_decode($response->getBody(), true);
-            $data['_debug'] = [
-                'doctrine' => [
-                    'queries_count' => count($queryLogger->getQueryInfos()),
-                    'total_execution_time' => array_sum(array_map(function($qi){return $qi->getExecutionTime();}, $queryLogger->getQueryInfos())),
-                    'queries' => $queryLogger->getQueryInfos()
-                ]
-            ];
-            return new JsonResponse($data);
+        if( ! ($response instanceof JsonResponse)) {
+            return $response;
         }
+        $data = json_decode($response->getBody(), true);
+        $data['_debug'] = [
+            'doctrine' => [
+                'queries_count' => count($queryLogger->getQueryInfos()),
+                'total_execution_time' => array_sum(array_map(function($qi){return $qi->getExecutionTime();}, $queryLogger->getQueryInfos())),
+                'queries' => $queryLogger->getQueryInfos()
+            ]
+        ];
+        return new JsonResponse($data);
     }
 }

@@ -33,7 +33,7 @@ class RefreshToken implements RefreshTokenEntityInterface
 
     /**
      * @var \DateTime
-     * @Column(type="date")
+     * @Column(type="datetime")
      */
     protected $expiryDateTime;
 
@@ -47,7 +47,7 @@ class RefreshToken implements RefreshTokenEntityInterface
      * @var bool $revoked
      * @Column(type="boolean", options={"default" : false})
      */
-    protected $revoked;
+    protected $revoked = false;
 
     /**
      * @return int

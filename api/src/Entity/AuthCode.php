@@ -8,6 +8,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
@@ -41,13 +42,12 @@ class AuthCode implements AuthCodeEntityInterface
 
     /**
      * @var \DateTime $expiryDateTime
-     * @Column(type="date")
+     * @Column(type="datetime")
      */
     private $expiryDateTime;
 
     /**
-     * @var string $userIdentifier
-     * @Column(type="string")
+     * @var int|null $userIdentifier
      */
     private $userIdentifier;
 
@@ -73,7 +73,12 @@ class AuthCode implements AuthCodeEntityInterface
      * @var bool
      * @Column(type="boolean", options={"default" : false})
      */
-    private $revoked;
+    private $revoked = false;
+
+    public function __construct()
+    {
+        $this->scopes = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -158,7 +163,7 @@ class AuthCode implements AuthCodeEntityInterface
     /**
      * @return string
      */
-    public function getUserIdentifier(): string
+    public function getUserIdentifier(): ?int
     {
         return $this->userIdentifier;
     }
