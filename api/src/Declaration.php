@@ -5,6 +5,7 @@ namespace App;
 use App\Controller\HomeController;
 use App\Debug\DoctrineLogger;
 use App\Declarations\DoctrineDeclaration;
+use App\Declarations\OAuthDeclaration;
 use App\Entity\Product;
 use App\Entity\Program;
 use App\Entity\ProgramValue;
@@ -35,6 +36,7 @@ class Declaration extends \Sherpa\Declaration\Declaration
         $app->addDeclaration(DoctrineDeclarations::class);
         $app->addDeclaration(RestDeclaration::class);
         $app->addDeclaration(DoctrineDeclaration::class);
+        $app->addDeclaration(OAuthDeclaration::class);
         if( ! $app->isDebug()) {
             $app->addDeclaration(CacheRouteDeclaration::class);
         }
