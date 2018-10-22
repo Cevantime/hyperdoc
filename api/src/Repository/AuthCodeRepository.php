@@ -10,6 +10,9 @@ namespace App\Repository;
 
 
 use App\Entity\AuthCode;
+use App\Entity\Client;
+use App\Entity\User;
+use Aura\Router\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
@@ -43,8 +46,9 @@ class AuthCodeRepository extends ServiceRepository implements AuthCodeRepository
      */
     public function persistNewAuthCode(AuthCodeEntityInterface $authCodeEntity)
     {
-        $this->getEntityManager()->persist($authCodeEntity);
-        $this->getEntityManager()->flush();
+        $em = $this->getEntityManager();
+        $em->merge($authCodeEntity);
+        $em->flush();
     }
 
     /**
@@ -56,7 +60,7 @@ class AuthCodeRepository extends ServiceRepository implements AuthCodeRepository
     {
         $authCode = $this->findOneBy(['identifier' => $codeId]);
 
-        if($authCode) {
+        if ($authCode) {
             $authCode->setRevoked(true);
             $this->getEntityManager()->flush();
         }

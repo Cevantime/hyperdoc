@@ -79,4 +79,27 @@ class AccessTokenRepository extends ServiceRepository implements AccessTokenRepo
         $accessToken = $this->findOneBy(['identifier' => $tokenId]);
         return  ! $accessToken || $accessToken->isRevoked();
     }
+
+    public function getTokenFromIdentifier($identifier)
+    {
+        return $this->findOneBy(['identifier' => $identifier]);
+    }
+
+    /**
+     * @param $identifier
+     * @return AccessToken|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getTokenWithUserAndClientFromIdentifier($identifier)
+    {
+        return $this->createQueryBuilder('t')
+            ->leftJoin('t.user', 'u')
+            ->addSelect('u')
+            ->leftJoin('t.client', 'c')
+            ->addSelect('c')
+            ->where('t.identifier = :identifier')
+            ->setParameter('identifier', $identifier)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

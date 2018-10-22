@@ -1,9 +1,14 @@
 import BaseService from '@/services/BaseService';
+import Utils from '@/services/Utils';
 
 class ProgramService extends BaseService {
     public getPrograms() {
-        return this.get('/program');
+        return this.get('program');
+    }
+
+    public getProgram(slug: string, include='') {
+        return this.get('program/' + slug, {include: include});
     }
 }
 
-export const programService = new ProgramService;
+export default new ProgramService();

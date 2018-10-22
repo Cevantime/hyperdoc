@@ -10,7 +10,7 @@ namespace App\Entity;
 
 
 use Doctrine\Common\Collections\ArrayCollection;
-use League\Fractal\Resource\Collection;
+use Doctrine\Common\Collections\Collection;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 
 /**
@@ -212,7 +212,7 @@ class Client implements ClientEntityInterface
             return ;
         }
 
-        $this->accessTokens->add($authCode);
-        $authCode->setUser($this);
+        $this->authCodes->add($authCode);
+        $authCode->setClient($this);
     }
 }

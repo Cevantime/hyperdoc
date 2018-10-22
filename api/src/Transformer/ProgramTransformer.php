@@ -9,8 +9,8 @@
 namespace App\Transformer;
 
 
-use App\Entity\Program;
-use App\Entity\ProgramValue;
+use App\Entity\Content;
+use App\Entity\ContentValue;
 use App\Repository\ProgramRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -26,8 +26,8 @@ class ProgramTransformer extends TransformerAbstract
         'inputs',
         'outputs',
         'code',
-        'full-code',
-        'extended-inputs'
+        'fullCode',
+        'ownInputs'
     ];
 
     /**
@@ -46,7 +46,7 @@ class ProgramTransformer extends TransformerAbstract
         $this->programValueTransformer = $transformer;
     }
 
-    public function transform(Program $program)
+    public function transform(Content $program)
     {
         return [
             'id' => $program->getId(),
@@ -56,22 +56,22 @@ class ProgramTransformer extends TransformerAbstract
         ];
     }
 
-    public function includeInputs(Program $program)
-    {
-        return $this->collection($program->getInputs(), $this->programValueTransformer);
-    }
-
-    public function includeExtendedInputs(Program $program)
+    public function includeInputs(Content $program)
     {
         return $this->collection($program->getAllInputs(), $this->programValueTransformer);
     }
 
-    public function includeOutputs(Program $program)
+    public function includeOwnInputs(Content $program)
+    {
+        return $this->collection($program->getInputs(), $this->programValueTransformer);
+    }
+
+    public function includeOutputs(Content $program)
     {
         return $this->collection($program->getOutputs(), $this->programValueTransformer);
     }
 
-    public function includeExec(Program $program, ParamBag $params = null)
+    public function includeExec(Content $program, ParamBag $params = null)
     {
         if($params === null) {
             return null;
@@ -92,17 +92,17 @@ class ProgramTransformer extends TransformerAbstract
         return $this->primitive($code);
     }
 
-    public function includeFullCode(Program $program)
+    public function includeFullCode(Content $program)
     {
         return $this->primitive($program->getFullCode());
     }
 
-    public function includeDescription(Program $program)
+    public function includeDescription(Content $program)
     {
         return $this->primitive($program->getDescription());
     }
 
-    public function includeCode(Program $program)
+    public function includeCode(Content $program)
     {
         return $this->primitive($program->getCode());
     }

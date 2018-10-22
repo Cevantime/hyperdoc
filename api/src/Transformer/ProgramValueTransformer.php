@@ -9,13 +9,13 @@
 namespace App\Transformer;
 
 
-use App\Entity\ProgramValue;
+use App\Entity\ContentValue;
 use Doctrine\Common\Collections\Collection;
 use League\Fractal\TransformerAbstract;
 
 class ProgramValueTransformer extends TransformerAbstract
 {
-    public function transform(ProgramValue $value)
+    public function transform(ContentValue $value)
     {
         return [
             'id' => $value->getId(),

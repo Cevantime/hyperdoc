@@ -1,29 +1,42 @@
 <template>
-  <div id="app">
+  <div id="container">
     <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+      <ul id="menu">
+        <li><router-link to="/">Home</router-link></li>
+        <li><router-link to="/about">About</router-link></li>
+      </ul>
+      <div>
+        <div v-if="user">Bienvenue, {{ user.username }} ! <Logout></Logout></div>
+        <div v-else><Login></Login></div>
+      </div>
     </div>
     <router-view/>
   </div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+<script lang="ts">
+import Login from "@/components/Login.vue";
+import Logout from "@/components/Logout.vue";
+import Component from "vue-class-component";
+import Vue from "vue";
+import authService from '@/services/AuthService';
+import ProfileService from '@/services/ProfileService';
+
+@Component({
+  components: {
+    Login, Logout
+  }
+})
+export default class App extends Vue {
+  public user = null;
+
+  mounted() {
+    ProfileService.getProfile().then((json : any)=>{
+      this.user = json.data;
+    }).catch(e => {
+      this.user = null;
+    });
   }
 }
-</style>
+</script>
+

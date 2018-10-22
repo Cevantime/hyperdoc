@@ -28,22 +28,22 @@ class ValueInjection
     private $value;
 
     /**
-     * @ManyToOne(targetEntity="ProgramValue", inversedBy="injections")
-     * @var ProgramValue
+     * @ManyToOne(targetEntity="ContentValue", inversedBy="injections")
+     * @var ContentValue
      */
-    private $programValue;
+    private $contentValue;
 
     /**
-     * @ManyToOne(targetEntity="ProgramAssociation", inversedBy="injections")
-     * @var ProgramAssociation
+     * @ManyToOne(targetEntity="ContentAssociation", inversedBy="injections")
+     * @var ContentAssociation
      */
-    private $programAssociationInput;
+    private $contentAssociationInput;
 
     /**
-     * @ManyToOne(targetEntity="ProgramAssociation", inversedBy="injections")
-     * @var ProgramAssociation
+     * @ManyToOne(targetEntity="ContentAssociation", inversedBy="injections")
+     * @var ContentAssociation
      */
-    private $programAssociationOutput;
+    private $contentAssociationOutput;
 
     /**
      * @return int
@@ -82,56 +82,56 @@ class ValueInjection
     }
 
     /**
-     * @return ProgramValue
+     * @return ContentValue
      */
-    public function getProgramValue(): ProgramValue
+    public function getContentValue(): ContentValue
     {
-        return $this->programValue;
+        return $this->contentValue;
     }
 
     /**
-     * @param ProgramValue $programValue
+     * @param ContentValue $contentValue
      * @return ValueInjection
      */
-    public function setProgramValue(ProgramValue $programValue): ValueInjection
+    public function setContentValue(ContentValue $contentValue): ValueInjection
     {
-        $this->programValue = $programValue;
+        $this->contentValue = $contentValue;
         return $this;
     }
 
     /**
-     * @return ProgramAssociation
+     * @return ContentAssociation
      */
-    public function getProgramAssociationInput(): ProgramAssociation
+    public function getContentAssociationInput(): ContentAssociation
     {
-        return $this->programAssociationInput;
+        return $this->contentAssociationInput;
     }
 
     /**
-     * @param ProgramAssociation $programAssociationInput
+     * @param ContentAssociation $contentAssociationInput
      * @return ValueInjection
      */
-    public function setProgramAssociationInput(ProgramAssociation $programAssociationInput): ValueInjection
+    public function setContentAssociationInput(ContentAssociation $contentAssociationInput): ValueInjection
     {
-        $this->programAssociationInput = $programAssociationInput;
+        $this->contentAssociationInput = $contentAssociationInput;
         return $this;
     }
 
     /**
-     * @return ProgramAssociation
+     * @return ContentAssociation
      */
-    public function getProgramAssociationOutput(): ProgramAssociation
+    public function getContentAssociationOutput(): ContentAssociation
     {
-        return $this->programAssociationOutput;
+        return $this->contentAssociationOutput;
     }
 
     /**
-     * @param ProgramAssociation $programAssociationOutput
+     * @param ContentAssociation $contentAssociationOutput
      * @return ValueInjection
      */
-    public function setProgramAssociationOutput(ProgramAssociation $programAssociationOutput): ValueInjection
+    public function setContentAssociationOutput(ContentAssociation $contentAssociationOutput): ValueInjection
     {
-        $this->programAssociationOutput = $programAssociationOutput;
+        $this->contentAssociationOutput = $contentAssociationOutput;
         return $this;
     }
 

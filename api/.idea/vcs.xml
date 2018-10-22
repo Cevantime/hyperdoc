@@ -8,6 +8,8 @@
     <mapping directory="$PROJECT_DIR$/vendor/behat/transliterator" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/vendor/cevantime/sherpa-core" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/vendor/cevantime/sherpa-framework" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/vendor/cevantime/sherpa-plates" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/vendor/cevantime/sherpa-rest" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/vendor/cocur/slugify" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/vendor/codeception/codeception" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/vendor/doctrine/annotations" vcs="Git" />
@@ -30,6 +32,7 @@
     <mapping directory="$PROJECT_DIR$/vendor/league/event" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/vendor/league/fractal" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/vendor/league/oauth2-server" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/vendor/league/plates" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/vendor/maximebf/debugbar" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/vendor/middlewares/negotiation" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/vendor/monolog/monolog" vcs="Git" />

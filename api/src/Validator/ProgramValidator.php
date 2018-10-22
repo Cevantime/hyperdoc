@@ -21,7 +21,7 @@ class ProgramValidator implements RestValidatorInterface
      */
     private $programRepository;
 
-    const LANGUAGES = ['bash'];
+    const LANGUAGES = ['bash','zsh'];
 
     /**
      * ProgramValidator constructor.
@@ -35,18 +35,46 @@ class ProgramValidator implements RestValidatorInterface
     /**
      * @return boolean
      */
-    public function validate(InputBag $input)
+    public function validateForInsert(InputBag $input)
+    {
+        foreach (['language', 'title'] as $field) {
+            if(!isset($input[$field])) {
+                $input->getErrors()[] = 'You must provide a ' . $field;
+                return false;
+            }
+        }
+
+        return $this->validateNewTitle($input) && $this->validateCommon($input);
+    }
+
+    /**
+     * @return boolean
+     */
+    public function validateForUpdate(InputBag $input, $initialObject)
+    {
+        $valid = true;
+        if($input['title'] !== $initialObject->getTitle()) {
+            $valid = $this->validateNewTitle($input);
+        }
+
+        return $valid && $this->validateCommon($input);
+    }
+
+    public function validateCommon(InputBag $input)
     {
         if (isset($input['slug'])) {
             $input->getErrors()[] = 'You cannot set slug for a program since it deduced from english title on program creation';
             return false;
         }
-
-        if (!isset($input['language']) || !in_array($input['language'], self::LANGUAGES)) {
-            $input->getErrors()[] = 'The provided language does not exist or is invalid';
+        if (isset($input['language']) && !in_array($input['language'], self::LANGUAGES)) {
+            $input->getErrors()[] = 'The provided language is not authorized';
             return false;
         }
+        return true;
+    }
 
+    public function validateNewTitle(InputBag $input)
+    {
         $slug = $input['language'] . '-' . (new Slugify())->slugify($input['title']);
         $program = $this->programRepository->getProgramBySlug($slug);
 
@@ -57,4 +85,5 @@ class ProgramValidator implements RestValidatorInterface
 
         return true;
     }
+
 }

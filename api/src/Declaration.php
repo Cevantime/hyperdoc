@@ -2,63 +2,68 @@
 
 namespace App;
 
-use App\Controller\HomeController;
-use App\Debug\DoctrineLogger;
 use App\Declarations\DoctrineDeclaration;
 use App\Declarations\OAuthDeclaration;
-use App\Entity\Product;
-use App\Entity\Program;
-use App\Entity\ProgramValue;
+use App\Entity\Content;
 use App\Middleware\AllowCrossOriginMiddleware;
+use App\Middleware\AuthenticationMiddleware;
 use App\Middleware\DebugMiddleware;
-use Aura\Router\Map;
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\DBAL\Logging\LoggerChain;
-use Doctrine\ORM\EntityManagerInterface;
+use function DI\autowire;
+use DI\ContainerBuilder;
+use Elastica\Client;
 use Middlewares\ContentLanguage;
-use PHPUnit\Util\Json;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 use Sherpa\App\App;
 use Sherpa\Declaration\CacheRouteDeclaration;
-use Sherpa\Declaration\DeclarationInterface;
 use Sherpa\Doctrine\DoctrineDeclarations;
+use Sherpa\Plates\Declarations;
 use Sherpa\Rest\Declaration as RestDeclaration;
-use Zend\Diactoros\Request;
-use Zend\Diactoros\Response\JsonResponse;
-use Zend\Diactoros\Stream;
+use function DI\get;
+use function DI\create;
+use Sherpa\Rest\Middleware\AddDoctrineAdapter;
+use Sherpa\Routing\Map;
 
 class Declaration extends \Sherpa\Declaration\Declaration
 {
-
-    public function declarations(App $app)
+    public function custom(App $app)
     {
         $app->addDeclaration(DoctrineDeclarations::class);
         $app->addDeclaration(RestDeclaration::class);
+        $app->addDeclaration(\Sherpa\Rest\Declarations\DoctrineDeclarations::class);
+        $app->addDeclaration(Declarations::class);
         $app->addDeclaration(DoctrineDeclaration::class);
         $app->addDeclaration(OAuthDeclaration::class);
+
         if( ! $app->isDebug()) {
             $app->addDeclaration(CacheRouteDeclaration::class);
         }
-    }
 
-    public function delayed(App $app)
-    {
-        $app->add((new ContentLanguage(['en', 'fr']))->usePath(true), 200);
-        $app->add(new AllowCrossOriginMiddleware());
+        $app->pipe(ContentLanguage::class, 200);
+        $app->pipe(AllowCrossOriginMiddleware::class, 500);
 
         if ($app->isDebug()) {
-            $app->add(new DebugMiddleware($app->get(EntityManagerInterface::class)));
+            $app->pipe(DebugMiddleware::class, 100);
         }
     }
 
     public function routes(Map $map)
     {
-        $map->crud(Program::class, function ($map) {
-            $map->getRoute('item')->tokens(['id' => '[a-z0-9\-]+']);
-            $map->getRoute('update')->tokens(['id' => '[a-z0-9\-]+']);
-            $map->getRoute('delete')->tokens(['id' => '[a-z0-9\-]+']);
-        }, '', '/{locale}');
+        $map->tokens(['id' => '[a-z0-9\-]+']);
+        $map->pipe(AuthenticationMiddleware::class);
+        $map->attach('api', '/api', ApiRoutes::class.'::init');
+        $map->unpipe();
+    }
+
+    public function definitions(ContainerBuilder $builder)
+    {
+        $builder->addDefinitions([
+            'locales' => ['en', 'fr'],
+            ContentLanguage::class => autowire()->constructor(get('locales'))->method('usePath', true),
+            'elasticsearch.config' => [
+                'host' => 'localhost',
+                'port' => '9200'
+            ],
+            Client::class => autowire()->constructor(get('elasticsearch.config'))
+        ]);
     }
 
 }
