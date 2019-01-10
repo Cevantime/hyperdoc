@@ -1,7 +1,7 @@
 /api/.env
 /nbproject/
 /api/vendor/
-/api/sherpa-doctrine/
-/api/sherpa-rest/
 /api/*.key
 /.idea/
+/api/var/cache/*
+!.gitkeep
