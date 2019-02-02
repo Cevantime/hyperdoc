@@ -19,6 +19,6 @@ class ApiRoutes
     {
         $map->crud(Program::class, null, '', '{/locale}');
         $map->get('profile', '/profile', ProfileController::class . '::getProfile');
-        $map->get('revoke_token', '/revoke/{token}', TokenController::class . '::revokeAccessToken');
+        $map->delete('revoke_token', '/revoke', TokenController::class . '::revokeAccessToken');
     }
 }

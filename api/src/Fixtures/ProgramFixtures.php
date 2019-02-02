@@ -36,8 +36,11 @@ class ProgramFixtures extends AbstractFixture implements DependentFixtureInterfa
         $progTrans = $prog->translate('fr');
         $progTrans->setDescription("Mon super programme !");
         $progTrans->setTitle("Mon titre");
-        $prog->mergeNewTranslations();
+        $progEn = $prog->translate('en');
+        $progEn->setDescription("My super program!");
+        $progEn->setTitle("My title");
         $prog->setSlug('java-' . (new Slugify())->slugify($progTrans->getTitle()));
+        $prog->mergeNewTranslations();
         $manager->persist($prog);
         $manager->flush();
     }

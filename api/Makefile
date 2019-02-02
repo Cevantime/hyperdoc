@@ -3,3 +3,6 @@ migration:
 
 migrate:
 	vendor/bin/doctrine-migrations migrations:migrate
+
+load:
+	bin/console fixtures:load

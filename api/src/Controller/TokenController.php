@@ -18,9 +18,9 @@ use Zend\Diactoros\Response\EmptyResponse;
 
 class TokenController extends AppController
 {
-    public function revokeAccessToken(ServerRequestInterface $request, AccessTokenRepository $tokenRepository, EntityManagerInterface $em)
+    public function revokeAccessToken(ServerRequestInterface $request, AccessTokenRepository $tokenRepository)
     {
-        $tokenRepository->revokeAccessToken($token = (new Parser())->parse($request->getAttribute('token'))->getClaim('jti'));
+        $tokenRepository->revokeAccessToken($token = (new Parser())->parse($request->getQueryParams()['token'])->getClaim('jti'));
         return new EmptyResponse();
     }
 }
