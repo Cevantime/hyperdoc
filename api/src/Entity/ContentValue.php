@@ -14,9 +14,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 /**
- * Class ProgramParameter
+ * Class ContentValue
  * @package App\Entity
- * @Entity(repositoryClass="App\Repository\ProgramValueRepository")
+ * @Entity(repositoryClass="App\Repository\ContentValueRepository")
  */
 class ContentValue
 {
@@ -67,14 +67,9 @@ class ContentValue
      * @ManyToMany(targetEntity="Content", inversedBy="associatedInputs")
      */
     protected $contentsAssociatedInput;
-    /**
-     * @var Content
-     * @ManyToOne(targetEntity="Program", inversedBy="outputs")
-     */
-    protected $contentOutput;
 
     /**
-     * @OneToMany(targetEntity="ValueInjection", mappedBy="programValue")
+     * @OneToMany(targetEntity="ValueInjection", mappedBy="contentValue")
      * @var Collection
      */
     protected $injections;

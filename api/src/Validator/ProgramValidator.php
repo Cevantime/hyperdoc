@@ -86,4 +86,15 @@ class ProgramValidator implements RestValidatorInterface
         return true;
     }
 
+    /**
+     * @return boolean
+     */
+    public function validate(InputBag $input, $initialObject = null)
+    {
+        if ($initialObject === null) {
+            return $this->validateForInsert($input);
+        } else {
+            return $this->validateForUpdate($input,  $initialObject);
+        }
+    }
 }

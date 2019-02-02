@@ -21,6 +21,7 @@ use function DI\get;
 use function DI\create;
 use Sherpa\Rest\Middleware\AddDoctrineAdapter;
 use Sherpa\Routing\Map;
+use Zend\Diactoros\Response;
 
 class Declaration extends \Sherpa\Declaration\Declaration
 {
@@ -47,9 +48,12 @@ class Declaration extends \Sherpa\Declaration\Declaration
 
     public function routes(Map $map)
     {
-        $map->tokens(['id' => '[a-z0-9\-]+']);
+        $map->get('home','/', function(){
+            return new Response\HtmlResponse("Hello world !!");
+        });
+        $map->tokens(['id' => '[a-z0-9\-]+','token'=>['.+']]);
         $map->pipe(AuthenticationMiddleware::class);
-        $map->attach('api', '/api', ApiRoutes::class.'::init');
+        $map->attach('api.', '/api', ApiRoutes::class.'::init');
         $map->unpipe();
     }
 

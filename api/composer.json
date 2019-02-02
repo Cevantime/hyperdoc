@@ -14,7 +14,9 @@
         "cevantime/sherpa-rest": "^0.0.1",
         "ruflin/elastica": "^6.0",
         "symfony/console": "^4.1",
-        "doctrine/migrations": "^1.8"
+        "doctrine/migrations": "^1.8",
+        "doctrine/data-fixtures": "^1.3",
+        "symfony/var-dumper": "^4.2"
     },
     "require-dev": {
         "codeception/codeception": "2.4.x-dev",

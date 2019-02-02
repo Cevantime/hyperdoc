@@ -9,7 +9,7 @@
 namespace App\Entity;
 
 /**
- * Class Program
+ * Class ValueInjection
  * @package App\Entity
  * @Entity()
  */

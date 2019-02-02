@@ -8,6 +8,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Scope;
 use App\Entity\User;
 use App\Repository\AccessTokenRepository;
 use App\Repository\UserRepository;

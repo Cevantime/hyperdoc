@@ -16,7 +16,7 @@ use League\OAuth2\Server\Entities\Traits\EntityTrait;
 use League\OAuth2\Server\Entities\UserEntityInterface;
 
 /**
- * Class Program
+ * Class User
  * @package App\Entity
  * @Entity(repositoryClass="App\Repository\UserRepository")
  */

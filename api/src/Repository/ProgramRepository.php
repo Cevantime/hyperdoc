@@ -10,6 +10,7 @@ namespace App\Repository;
 
 
 use App\Entity\Content;
+use App\Entity\Program;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Psr\Http\Message\ServerRequestInterface;
@@ -31,8 +32,6 @@ class ProgramRepository extends ContentRepository
             ->addSelect('pi')
             ->leftJoin($alias.'.associatedInputs', 'ai')
             ->addSelect('ai')
-            ->leftJoin($alias.'.outputs', 'po')
-            ->addSelect('po')
             ->leftJoin($alias.'.wrapped', 'w')
             ->addSelect('w');
     }

@@ -54,6 +54,7 @@ class Scope implements ScopeEntityInterface
     public function __construct()
     {
         $this->accessTokens = new ArrayCollection();
+        $this->authCodes = new ArrayCollection();
     }
 
     /**

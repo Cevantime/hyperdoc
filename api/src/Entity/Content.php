@@ -38,13 +38,13 @@ abstract class Content implements ContentInterface
     protected $slug;
 
     /**
-     * @OneToMany(targetEntity="ProgramAssociation", mappedBy="wrapperProgram", cascade="all")
+     * @OneToMany(targetEntity="ContentAssociation", mappedBy="wrapperContent", cascade="all")
      * @var Collection<ContentAssociation>
      */
     protected $wrapped;
 
     /**
-     * @OneToMany(targetEntity="ProgramAssociation", mappedBy="wrappedProgram")
+     * @OneToMany(targetEntity="ContentAssociation", mappedBy="wrappedContent")
      * @var Collection<ContentAssociation>
      */
     protected $wrappers;
@@ -57,13 +57,13 @@ abstract class Content implements ContentInterface
 
     /**
      * @var Collection<ContentValue>
-     * @OneToMany(targetEntity="ProgramValue", mappedBy="programInput", cascade="all")
+     * @OneToMany(targetEntity="ContentValue", mappedBy="contentInput", cascade="all")
      */
     protected $inputs;
 
     /**
      * @var Collection<ContentValue>
-     * @ManyToMany(targetEntity="ProgramValue", mappedBy="programsAssociatedInput")
+     * @ManyToMany(targetEntity="ContentValue", mappedBy="contentsAssociatedInput")
      */
     protected $associatedInputs;
 

@@ -9,5 +9,6 @@ $app->boot();
 $application = new \Symfony\Component\Console\Application();
 
 $application->add($app->get(\App\Command\IndexPrograms::class));
+$application->add($app->get(\App\Command\LoadFixtures::class));
 
 $application->run();

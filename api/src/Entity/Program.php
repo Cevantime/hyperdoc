@@ -61,7 +61,7 @@ class Program extends Content
      */
     public function setCode(string $code): Content
     {
-        $this->setCode($code);
+        $this->code = $code;
         return $this;
     }
 

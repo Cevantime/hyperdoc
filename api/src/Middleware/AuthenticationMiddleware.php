@@ -11,6 +11,7 @@ namespace App\Middleware;
 
 use App\Repository\AccessTokenRepository;
 use App\Repository\UserRepository;
+use Aura\Router\Exception;
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\AuthorizationValidators\BearerTokenValidator;
 use League\OAuth2\Server\ResourceServer;
