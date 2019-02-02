@@ -3,20 +3,20 @@
     "description": "A basic skeleton for sherpa framework",
     "license": "MIT",
     "require": {
-        "php": ">=7.1",
-        "cevantime/sherpa-framework": "@dev",
-        "symfony/yaml": "2.*",
-        "doctrine/orm": "2.*",
-        "doctrine/common": "^2.9@dev",
-        "doctrine/migrations": "^2.0@dev",
-        "league/fractal": "^0.13.0@dev",
-        "pagerfanta/pagerfanta": "^1.0@dev",
-        "doctrine/cache": "~1.4",
-        "symfony/property-access": "^4.2@dev",
+        "php": ">=7.2",
+        "cevantime/sherpa-framework": "0.0.1",
         "knplabs/doctrine-behaviors": "~1.1",
         "middlewares/negotiation": "dev-master",
         "cocur/slugify": "dev-master",
-        "league/oauth2-server": "dev-master"
+        "league/oauth2-server": "dev-master",
+        "cevantime/sherpa-plates": "0.0.1",
+        "cevantime/sherpa-doctrine": "^0.0.1",
+        "cevantime/sherpa-rest": "^0.0.1",
+        "ruflin/elastica": "^6.0",
+        "symfony/console": "^4.1",
+        "doctrine/migrations": "^1.8",
+        "doctrine/data-fixtures": "^1.3",
+        "symfony/var-dumper": "^4.2"
     },
     "require-dev": {
         "codeception/codeception": "2.4.x-dev",
@@ -28,13 +28,9 @@
             "email": "thibaulttruffert@hotmail.com"
         }
     ],
-
     "autoload": {
         "psr-4": {
-            "App\\": "src/",
-            "Sherpa\\Doctrine\\" :"sherpa-doctrine/",
-            "Sherpa\\Rest\\" :"sherpa-rest/"
+            "App\\": "src/"
         }
-    },
-    "minimum-stability" : "dev"
+    }
 }

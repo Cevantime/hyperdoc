@@ -193,11 +193,11 @@ class AuthCode implements AuthCodeEntityInterface
     }
 
     /**
-     * @return Collection
+     * @return array
      */
-    public function getScopes(): Collection
+    public function getScopes(): array
     {
-        return $this->scopes;
+        return $this->scopes->toArray();
     }
 
     /**

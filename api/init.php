@@ -25,6 +25,6 @@ $debug = (bool) ($_SERVER['APP_DEBUG'] ?? ('prod' !== $env));
 
 $app = new App($debug);
 
-$app->set('projectDir', $projectDir);
+$app->set('project.root', $projectDir);
 
 $app->addDeclaration(\App\Declaration::class);

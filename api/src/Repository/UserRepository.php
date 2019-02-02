@@ -21,4 +21,14 @@ class UserRepository extends ServiceRepository
     {
         parent::__construct($em, User::class);
     }
+
+    public function getUserByUsername($username)
+    {
+        return $this->createQueryBuilder('u')
+            ->where('u.username = :username')
+            ->orWhere('u.email = :username')
+            ->setParameter('username', $username)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

@@ -23,8 +23,12 @@ class CurrentLocaleCallable
 
     public function __invoke()
     {
-        /** @var ServerRequestInterface $request */
-        $request = $this->container->get(ServerRequestInterface::class);
-        return $request->getHeaderLine('Accept-Language');
+        if($this->container->has(ServerRequestInterface::class)) {
+            /** @var ServerRequestInterface $request */
+            $request = $this->container->get(ServerRequestInterface::class);
+            return $request->getHeaderLine('Accept-Language');
+        } else {
+            return "en";
+        }
     }
 }

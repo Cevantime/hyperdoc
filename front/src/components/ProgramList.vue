@@ -1,27 +1,32 @@
 <template>
 <section>
     <h1>Liste des programmes</h1>
-    <ul>
+    <ul v-if="programs.length > 0">
         <li :key="program.id" v-for="program of programs">
-            {{ program.title }}
+            <router-link :to="{ name: 'program', params: { slug: program.slug }}">{{ program.title}}</router-link>
         </li>
     </ul>
+    <div v-else>{{ message }}</div>
     <p>Nombre de programmes : {{ programCount }}</p>
 </section>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 import Program from "@/models/Program";
-import { programService } from '@/services/ProgramService';
+import programService from '@/services/ProgramService';
 
 @Component
 export default class ProgramList extends Vue {
   public programs: Program[] = [];
+  public message = 'Aucun programe à ce jour';
 
   created() {
-    programService.getPrograms().then(rep => {
-      this.programs = rep.data.data;
+    programService.getPrograms().then((rep : any) => {
+      this.programs = rep.data;
+    }).catch(e => {
+      console.log(e.message);
+      this.message = 'Impossible de charger la liste des programmes';
     });
   }
 

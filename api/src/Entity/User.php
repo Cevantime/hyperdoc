@@ -16,7 +16,7 @@ use League\OAuth2\Server\Entities\Traits\EntityTrait;
 use League\OAuth2\Server\Entities\UserEntityInterface;
 
 /**
- * Class Program
+ * Class User
  * @package App\Entity
  * @Entity(repositoryClass="App\Repository\UserRepository")
  */
@@ -47,13 +47,7 @@ class User implements UserEntityInterface
     protected $password;
 
     /**
-     * @var string $fullCode
-     * @Column(type="string")
-     */
-    protected $locale;
-
-    /**
-     * @var Collection<Program> $programs
+     * @var Collection<Content> $programs
      * @OneToMany(targetEntity="Program", mappedBy="author")
      */
     protected $programs;
@@ -87,10 +81,12 @@ class User implements UserEntityInterface
 
     /**
      * @param int $id
+     * @return User
      */
-    public function setId(int $id): void
+    public function setId(int $id): User
     {
         $this->id = $id;
+        return $this;
     }
 
     /**
@@ -103,10 +99,12 @@ class User implements UserEntityInterface
 
     /**
      * @param string $email
+     * @return User
      */
-    public function setEmail(string $email): void
+    public function setEmail(string $email): User
     {
         $this->email = $email;
+        return $this;
     }
 
     /**
@@ -119,10 +117,12 @@ class User implements UserEntityInterface
 
     /**
      * @param string $username
+     * @return User
      */
-    public function setUsername(string $username): void
+    public function setUsername(string $username): User
     {
         $this->username = $username;
+        return $this;
     }
 
     /**
@@ -135,26 +135,12 @@ class User implements UserEntityInterface
 
     /**
      * @param string $password
+     * @return User
      */
-    public function setPassword(string $password): void
+    public function setPassword(string $password): User
     {
         $this->password = $password;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLocale(): string
-    {
-        return $this->locale;
-    }
-
-    /**
-     * @param string $locale
-     */
-    public function setLocale(string $locale): void
-    {
-        $this->locale = $locale;
+        return $this;
     }
 
     /**
@@ -167,18 +153,12 @@ class User implements UserEntityInterface
 
     /**
      * @param Collection $programs
+     * @return User
      */
-    public function setPrograms(Collection $programs): void
+    public function setPrograms(Collection $programs): User
     {
         $this->programs = $programs;
-    }
-
-    /**
-     * @return Collection
-     */
-    public function getAccessTokens(): Collection
-    {
-        return $this->accessTokens;
+        return $this;
     }
 
     /**
@@ -191,10 +171,12 @@ class User implements UserEntityInterface
 
     /**
      * @param Collection $authCodes
+     * @return User
      */
-    public function setAuthCodes(Collection $authCodes): void
+    public function setAuthCodes(Collection $authCodes): User
     {
         $this->authCodes = $authCodes;
+        return $this;
     }
 
     public function addAccessToken(AccessToken $accessToken)
@@ -221,7 +203,7 @@ class User implements UserEntityInterface
             return ;
         }
 
-        $this->accessTokens->add($authCode);
+        $this->authCodes->add($authCode);
         $authCode->setUser($this);
     }
 

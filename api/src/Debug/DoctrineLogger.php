@@ -40,6 +40,6 @@ class DoctrineLogger implements SQLLogger
      */
     public function getQueryInfos(): array
     {
-        return $this->queryInfos;
+        return $this->queryInfos ?: [];
     }
 }

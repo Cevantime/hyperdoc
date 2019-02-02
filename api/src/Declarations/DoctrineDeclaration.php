@@ -11,12 +11,14 @@ namespace App\Declarations;
 
 use App\Service\FullCodeGenerator;
 use App\Subscriber\FullCodeSubscriber;
+use App\Subscriber\ResolveAccessTokenOwnerSubscriber;
 use App\Subscriber\SnakifyClassnamesSubscriber;
 use DI\Container;
 use DI\ContainerBuilder;
 use Doctrine\Common\EventManager;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\UnderscoreNamingStrategy;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
 use Knp\DoctrineBehaviors\ORM\Sluggable\SluggableSubscriber;
 use Knp\DoctrineBehaviors\ORM\Timestampable\TimestampableSubscriber;
@@ -31,6 +33,8 @@ class DoctrineDeclaration extends Declaration
 {
     public function delayed(App $app)
     {
+        $doctrineConfig = $app->get('doctrine.config');
+        $doctrineConfig->setNamingStrategy(new UnderscoreNamingStrategy(CASE_LOWER));
 
         $em = $app->get(EntityManagerInterface::class);
         $ev = $em->getEventManager();
@@ -61,9 +65,6 @@ class DoctrineDeclaration extends Declaration
             'datetime'
         ));
 
-        $ev->addEventSubscriber(new SnakifyClassnamesSubscriber());
-
-        $ev->addEventSubscriber(new FullCodeSubscriber($app->get(FullCodeGenerator::class)));
-
+        $ev->addEventSubscriber($app->get(ResolveAccessTokenOwnerSubscriber::class));
     }
 }

@@ -33,7 +33,7 @@ class ScopeRepository extends ServiceRepository implements ScopeRepositoryInterf
      */
     public function getScopeEntityByIdentifier($identifier)
     {
-        return $this->findBy(['identifier' => $identifier]);
+        return $this->findOneBy(['identifier' => $identifier]);
     }
 
     /**
