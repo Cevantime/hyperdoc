@@ -24,3 +24,6 @@ npm run test
 ```
 npm run lint
 ```
+
+### Manage projects graphically
+vue ui

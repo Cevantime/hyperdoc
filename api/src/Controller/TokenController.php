@@ -21,6 +21,7 @@ class TokenController extends AppController
     public function revokeAccessToken(ServerRequestInterface $request, AccessTokenRepository $tokenRepository)
     {
         $tokenRepository->revokeAccessToken($token = (new Parser())->parse($request->getQueryParams()['token'])->getClaim('jti'));
+
         return new EmptyResponse();
     }
 }

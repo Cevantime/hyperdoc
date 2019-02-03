@@ -55,6 +55,9 @@ class OAuthController extends AppController
                 return $this->redirectToRoute('login');
             }
 
+            unset($_SESSION['user']);
+            unset($_SESSION['auth_request']);
+
             $authRequest->setUser($user);
             // At this point you should redirect the user to an authorization page.
             // This form will ask the user to approve the client and the scopes requested.

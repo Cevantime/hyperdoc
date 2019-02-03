@@ -36,7 +36,7 @@ class ResolveAccessTokenOwnerSubscriber implements EventSubscriber
     public function getSubscribedEvents()
     {
         return [
-            Events::prePersist => 'prePersist'
+            Events::prePersist
         ];
     }
 

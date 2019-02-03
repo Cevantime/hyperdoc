@@ -9,14 +9,14 @@
 namespace App\Command;
 
 
-use App\Indexer\ProgramIndexer;
+use App\ElasticSearch\Indexer\ProgramIndexer;
 use App\Repository\ProgramRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class IndexPrograms extends Command
+class ElasticIndex extends Command
 {
     /**
      * @var ProgramRepository
@@ -41,9 +41,9 @@ class IndexPrograms extends Command
 
     protected function configure()
     {
-        $this->setName('elasticsearch:index:programs')
-            ->setDescription('Index all program in mysql to ElasticSearch')
-            ->setHelp("Run this command when you have programs that are not yet indexed in elasticsearch. It may occur if you didn't use doctrine to index programs");
+        $this->setName('elasticsearch:index')
+            ->setDescription('Index data in db to ElasticSearch')
+            ->setHelp("Run this command when you have data that are not yet indexed in elasticsearch. It may occur if you didn't use doctrine to index data");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

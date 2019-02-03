@@ -24,9 +24,16 @@ class ContentRepository  extends ServiceRepository implements DoctrineRestQueryB
 
     public function createQueryBuilderFromArray($alias, Bag $criteria)
     {
-        return $this->createQueryBuilder($alias)
+        $qb =  $this->createQueryBuilder($alias)
             ->leftJoin($alias.'.translations', 'tr')
             ->addSelect('tr');
+
+        if($search = $criteria->get('search')) {
+            $qb->andWhere($alias . '.slug LIKE :slug');
+            $qb->setParameter('slug', "%$search%");
+        }
+
+        return $qb;
     }
 
     public function createQueryBuilderFromIdentifier($alias, $identifier, Bag $criteria)

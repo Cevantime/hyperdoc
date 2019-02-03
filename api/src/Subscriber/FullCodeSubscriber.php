@@ -10,7 +10,7 @@ namespace App\Subscriber;
 
 
 use App\Entity\Program;
-use App\Service\FullCodeGenerator;
+use App\Generator\FullCodeGenerator;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -43,9 +43,9 @@ class FullCodeSubscriber implements EventSubscriber
     public function getSubscribedEvents()
     {
         return [
-            Events::postUpdate => 'postUpdate',
-            Events::postPersist => 'postPersist',
-            Events::preRemove => 'preRemove'
+            Events::postUpdate,
+            Events::postPersist,
+            Events::preRemove
         ];
     }
 

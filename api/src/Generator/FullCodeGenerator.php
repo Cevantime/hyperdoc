@@ -6,7 +6,7 @@
  * Time: 19:30
  */
 
-namespace App\Service;
+namespace App\Generator;
 
 
 use App\Entity\Program;

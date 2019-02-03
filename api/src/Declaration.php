@@ -36,6 +36,8 @@ class Declaration extends \Sherpa\Declaration\Declaration
 
         if( ! $app->isDebug()) {
             $app->addDeclaration(CacheRouteDeclaration::class);
+        } else {
+            ini_set('xdebug.show_exception_trace', 1);
         }
 
         $app->pipe(ContentLanguage::class, 200);
@@ -52,7 +54,7 @@ class Declaration extends \Sherpa\Declaration\Declaration
             return new Response\HtmlResponse("Hello world !!");
         });
         $map->tokens(['id' => '[a-z0-9\-]+','token'=>['.+']]);
-        $map->pipe(AuthenticationMiddleware::class);
+        // $map->pipe(AuthenticationMiddleware::class);
         $map->attach('api.', '/api', ApiRoutes::class.'::init');
         $map->unpipe();
     }

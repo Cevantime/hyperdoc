@@ -19,7 +19,6 @@ import Login from "@/components/Login.vue";
 import Logout from "@/components/Logout.vue";
 import Component from "vue-class-component";
 import Vue from "vue";
-import authService from '@/services/AuthService';
 import ProfileService from '@/services/ProfileService';
 
 @Component({
@@ -28,14 +27,17 @@ import ProfileService from '@/services/ProfileService';
   }
 })
 export default class App extends Vue {
-  public user = null;
 
   mounted() {
     ProfileService.getProfile().then((json : any)=>{
-      this.user = json.data;
+      this.$store.commit("connect", json.data);
     }).catch(e => {
-      this.user = null;
+      this.$store.commit("connect", null);
     });
+  }
+
+  get user() {
+    return this.$store.state.user;
   }
 }
 </script>

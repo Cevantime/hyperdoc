@@ -6,7 +6,7 @@
  * Time: 23:11
  */
 
-namespace App\Indexer;
+namespace App\ElasticSearch\Indexer;
 
 
 use Elastica\Client;
@@ -69,7 +69,9 @@ abstract class IndexerAbstract
 
     public function clear()
     {
-        $this->client->request($this->indexName, Request::DELETE);
+        if($this->index->exists()) {
+            $this->client->request($this->indexName, Request::DELETE);
+        }
         $this->createIndex();
     }
 
@@ -97,5 +99,10 @@ abstract class IndexerAbstract
     protected function generateId()
     {
         return bin2hex(openssl_random_pseudo_bytes(10));
+    }
+
+    public function getIndex()
+    {
+        return $this->index;
     }
 }

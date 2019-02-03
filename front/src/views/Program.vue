@@ -7,7 +7,7 @@
                 <label for="code"><textarea name="code" id="code" cols="100" rows="10" v-model="editedProgram.code"></textarea></label>
             </p>
             <p>
-                <input type="text" name="search" @input="search" @change="search">
+                Rechercher un programme : <ProgramSearch></ProgramSearch>
             </p>
             <button type="submit">Modifier</button>
         </form>
@@ -21,18 +21,20 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import ProgramService from "@/services/ProgramService";
 import ProgramDetail from "@/components/ProgramDetail.vue";
+import ProgramSearch from "@/components/ProgramSearch.vue";
+import Prgr from '@/models/Program';
 import { Observable } from 'rxjs/Observable';
 import { fromEvent } from 'rxjs/observable/fromEvent';
 
 @Component({
   components: {
-    ProgramDetail
+    ProgramDetail,
+    ProgramSearch
   }
 })
 export default class Program extends Vue {
   public program: Program | null = null;
   public editedProgram: Program | null = null;
-  public searchTimeOut : any;
 
   mounted() {
     ProgramService.getProgram(this.$route.params.slug, 'code,fullCode').then((rep: any) => {
@@ -44,22 +46,12 @@ export default class Program extends Vue {
     this.editedProgram = Object.assign({}, this.program);
   }
 
-  search(e : any) {
-    const search = e.target.value;
-    if(this.searchTimeOut !== undefined) {
-        clearTimeout(this.searchTimeOut);
-    }
-    this.searchTimeOut = setTimeout(()=> {
-        this.doSearch(search);
-    }, 200);
-  }
-
-  doSearch(search : string) {
-
+  programSelected(program : Prgr) {
+      console.log("program selected : " + program.title);
   }
 
   save() {
-
+      
   }
 }
 </script>

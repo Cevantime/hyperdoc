@@ -1,5 +1,7 @@
 <template>
-  
+<div>
+      Veuilez patienter pendant la connection
+</div>
 </template>
 
 <script lang="ts">

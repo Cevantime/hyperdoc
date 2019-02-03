@@ -9,7 +9,7 @@
 namespace App\Declarations;
 
 
-use App\Service\FullCodeGenerator;
+use App\Generator\FullCodeGenerator;
 use App\Subscriber\FullCodeSubscriber;
 use App\Subscriber\ResolveAccessTokenOwnerSubscriber;
 use App\Subscriber\SnakifyClassnamesSubscriber;

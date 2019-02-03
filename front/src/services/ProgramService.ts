@@ -9,6 +9,10 @@ class ProgramService extends BaseService {
     public getProgram(slug: string, include='') {
         return this.get('program/' + slug, {include: include});
     }
+
+    public searchProgram(search : string) {
+        return this.get('program', {search : search});
+    }
 }
 
 export default new ProgramService();

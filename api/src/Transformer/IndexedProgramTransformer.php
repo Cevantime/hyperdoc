@@ -9,12 +9,14 @@
 namespace App\Transformer;
 
 
+use Elastica\Result;
 use League\Fractal\TransformerAbstract;
 
 class IndexedProgramTransformer extends TransformerAbstract
 {
-    public function transform($program)
+    public function transform($programResult)
     {
-        return $program;
+        /** @var Result $programResult */
+        return $programResult->getData();
     }
 }
